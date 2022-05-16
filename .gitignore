@@ -105,7 +105,8 @@ ipch/
 *.sdf
 *.cachefile
 *.VC.db
-*.VC.VC.opendb
+*.VC.VC.opendb 
+*.json
 
 # Visual Studio profiler
 *.psess
