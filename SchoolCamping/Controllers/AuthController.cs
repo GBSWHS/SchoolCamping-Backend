@@ -55,5 +55,46 @@ namespace SchoolCamping.Controllers
 
             return new JsonResult(response);
         }
+        [HttpPut]
+        [RequireAuth]
+        [Route("reserve")]
+        public async Task<IActionResult> PutReserveAsync([FromQuery] int id, [FromBody]AdminReserveModel m)
+        {
+            var db = new LocalDbContext();
+
+            var u = await db.Reserves.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
+            var response = new GeneralResponseModel();
+            if (u == null)
+            {
+                response.Success = false;
+                response.Message = "Unknown Reserve.";
+                return new JsonResult(response);
+            }
+
+            if (u.ReservedAt == m.Date)
+            {
+                db.Reserves.Update(new Reserves() { Id = id, Mates = m.Mates, Passcode = u.Passcode, ReservedAt = m.Date, Teacher = m.Teacher });
+                await db.SaveChangesAsync();
+
+                response.Message = "Successfully modified reserve.";
+                return new JsonResult(response);
+            }
+
+            bool exists = await db.Reserves.AnyAsync(x => x.ReservedAt == m.Date);
+
+            if (exists)
+            {
+                response.Success = false;
+                response.Message = "already reserved.";
+                return new JsonResult(response);
+            }
+
+            db.Reserves.Update(new Reserves() { Id = id, Mates = m.Mates, Passcode = u.Passcode, ReservedAt = m.Date, Teacher = m.Teacher });
+            await db.SaveChangesAsync();
+
+            response.Message = "Successfully modified reserve.";
+
+            return new JsonResult(response);
+        }
     }
 }

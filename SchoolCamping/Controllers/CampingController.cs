@@ -21,7 +21,7 @@ namespace SchoolCamping.Controllers
                 .Take(30);
 
             var data = from m in reserves
-                select new {m.Id, m.Mates, m.ReservedAt, m.Teacher};
+                select new {m.Id, Mates = m.Mates.Mask(), m.ReservedAt, m.Teacher};
             var response = new GeneralResponseModel
             {
                 Data = data
@@ -99,6 +99,15 @@ namespace SchoolCamping.Controllers
             {
                 response.Success = false;
                 response.Message = "Unknown Reserve.";
+                return new JsonResult(response);
+            }
+
+            if (u.ReservedAt == m.Date)
+            {
+                db.Reserves.Update(new Reserves() { Id = id, Mates = m.Mates, Passcode = u.Passcode, ReservedAt = m.Date, Teacher = m.Teacher });
+                await db.SaveChangesAsync();
+
+                response.Message = "Successfully modified reserve.";
                 return new JsonResult(response);
             }
 

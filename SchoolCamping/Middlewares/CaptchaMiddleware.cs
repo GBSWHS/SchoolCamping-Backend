@@ -11,17 +11,18 @@ namespace SchoolCamping.Middlewares
         public CaptchaMiddleware(ConfigurationManager m)
         {
             configuration = m;
-            validator.UpdateSecretKey(m.GetSection("RecaptchaSecretKey").Value);
+            validator.UpdateSecretKey(Vault.RecaptchaKey);
         }
 
         public static async Task InvokeAsync(HttpContext ctx, Func<Task> next)
         {
-            if (ctx.Request.Headers.ContainsKey("OH_SHIT_DEBUG"))
-            {
-                if (ctx.Request.Headers["OH_SHIT_DEBUG"] == "youshallnotpass")
-                    ctx.Items.Add("captcha", true);
-            }
-            else if (ctx.Request.Method == "POST" && ctx.Request.ContentType == "application/json")
+            // if (ctx.Request.Headers.ContainsKey("OH_SHIT_DEBUG"))
+            // {
+            //     if (ctx.Request.Headers["OH_SHIT_DEBUG"] == "youshallnotpass")
+            //         ctx.Items.Add("captcha", true);
+            // }
+            // else 
+            if (ctx.Request.Method == "POST" && ctx.Request.ContentType == "application/json")
             {
                 var obj = await GetRequestBodyAsync(ctx.Request);
                 
@@ -35,7 +36,9 @@ namespace SchoolCamping.Middlewares
 
         public static async Task<bool> VerifyCaptcha(string token)
         {
-            return await validator.IsCaptchaPassedAsync(token);
+            Console.WriteLine(JsonConvert.SerializeObject(await validator.GetCaptchaResultDataAsync(token)));
+            return true;
+            // return await validator.IsCaptchaPassedAsync(token);
         }
 
         public static HttpClient httpClient = new ();

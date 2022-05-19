@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls("http://+:3001");
 
 Vault.AuthKey = builder.Configuration.GetSection("AdministratorPassword").Value;
+Vault.RecaptchaKey = builder.Configuration.GetSection("RecaptchaSecretKey").Value;
+
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
     x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
@@ -28,7 +30,7 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (bool.Parse(builder.Configuration.GetSection("EnableSwagger").Value))
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -49,4 +51,5 @@ app.Run();
 class Vault
 {
     public static string AuthKey { get; set; }
+    public static string RecaptchaKey { get; set; }
 }
