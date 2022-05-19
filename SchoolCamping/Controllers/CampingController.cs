@@ -29,6 +29,25 @@ namespace SchoolCamping.Controllers
             return new JsonResult(response);
         }
 
+        [HttpGet]
+        [Route("reserve/{id}")]
+        public async Task<IActionResult> GetReserveAsync(int id, [FromQuery] string passcode)
+        {
+            var db = new LocalDbContext();
+
+            var u = await db.Reserves.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id && x.Passcode == passcode);
+            var response = new GeneralResponseModel();
+            if (u == null)
+            {
+                response.Success = false;
+                response.Message = "Unknown Reserve.";
+                return new JsonResult(response);
+            }
+
+            response.Data = u;
+            return new JsonResult(response);
+        }
+
         [HttpPost]
         [RequireCaptcha]
         [Route("reserve")]
