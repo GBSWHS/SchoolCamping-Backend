@@ -32,6 +32,24 @@ namespace SchoolCamping.Controllers
             return new JsonResult(response);
         }
 
+        [HttpGet]
+        [RequireAuth]
+        [Route("reserves")]
+        public async Task<IActionResult> GetReservesAsync()
+        {
+            var db = new LocalDbContext();
+            var reserves = db.Reserves.OrderBy(x => x.ReservedAt)
+                .Take(50);
+
+            var data = from m in reserves
+                select new { m.Id, Mates = m.Mates.Mask(), m.ReservedAt, m.Teacher };
+            var response = new GeneralResponseModel
+            {
+                Data = data
+            };
+            return new JsonResult(response);
+        }
+
         [HttpDelete]
         [RequireAuth]
         [Route("reserve")]
