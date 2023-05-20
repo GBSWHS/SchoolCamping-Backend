@@ -1,0 +1,1 @@
+﻿//await db.Reserves.AnyAsync(x=> x.Mates.Split().Any(xx=> model.Mates.Split().Any(xxx=> xxx == xx)))

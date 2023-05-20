@@ -62,6 +62,10 @@ namespace SchoolCamping.Controllers
                 response.Success = false;
                 response.Message = "already reserved.";
             }
+            else if (true) //todo 2-week check logic
+            {
+
+            }
             else
             {
                 try
