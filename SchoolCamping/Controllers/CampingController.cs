@@ -62,14 +62,35 @@ namespace SchoolCamping.Controllers
                 response.Success = false;
                 response.Message = "already reserved.";
             }
-            else if (true) //todo 2-week check logic
-            {
-
-            }
             else
             {
                 try
                 {
+                    var date = DateOnly.FromDateTime(DateTime.Today).DayNumber - new DateOnly().AddDays(14).DayNumber;
+                    var dateForward = DateOnly.FromDateTime(DateTime.Today).DayNumber + new DateOnly().AddDays(14).DayNumber;
+
+                    var twoWeek = db.Reserves.OrderBy(x => x.ReservedAt).Where(x => x.ReservedAt.DayNumber > date && x.ReservedAt.DayNumber < dateForward).Select(x => x.Mates);
+                    IEnumerable<string> dup = new List<string>();
+                    foreach (var reserves in twoWeek)
+                    {
+                        var Mates = reserves.Split();
+                        dup = from m in model.Mates.Split()
+                            where Mates.Contains(m)
+                            select m;
+                    }
+
+                    dup = dup.Distinct();
+                    
+                    
+                    if (dup.Any())
+                    {
+                        response.Success = false;
+                        response.Message = "two-week period.";
+                        response.Data = dup;
+                        return new JsonResult(response);
+                    }
+
+
                     var reserveModel = new Reserves
                         {Mates = model.Mates, ReservedAt = model.Date, Passcode = model.PassCode, Teacher = model.Teacher};
                     await db.Reserves.AddAsync(reserveModel);
