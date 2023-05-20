@@ -7,7 +7,7 @@
             string v = "";
             foreach (var value in val.Split(' '))
             {
-                val += $"{value[0]}{string.Join("", Enumerable.Repeat("*", value.Length - 1))}";
+                v += $"{value[0]}{string.Join("", Enumerable.Repeat("*", value.Length - 1))} ";
             }
             return v.Trim();
         }

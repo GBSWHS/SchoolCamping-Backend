@@ -30,11 +30,11 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 
 var app = builder.Build();
 
-if (bool.Parse(builder.Configuration.GetSection("EnableSwagger").Value))
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// if (bool.Parse(builder.Configuration.GetSection("EnableSwagger").Value))
+// {
+//     app.UseSwagger();
+//     app.UseSwaggerUI();
+// }
 
 app.UseCors(x =>
 {
