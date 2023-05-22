@@ -21,7 +21,7 @@ namespace SchoolCamping.Controllers
             var response = new GeneralResponseModel();
             if (key.Password == Vault.AuthKey)
             {
-                HttpContext.Session.SetString("admin", "true");
+                HttpContext.Items.Add("admin", true);
             }
             else
             {

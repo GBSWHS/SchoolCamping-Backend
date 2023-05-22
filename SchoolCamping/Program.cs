@@ -5,7 +5,7 @@ using SchoolCamping.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls("http://+:3001");
 
-Vault.AuthKey = builder.Configuration.GetSection("AdministratorPassword").Value;
+Vault.AuthKey = builder.Configuration.GetSection("AdministratorPassword").Value ?? "testing";
 Vault.RecaptchaKey = builder.Configuration.GetSection("RecaptchaSecretKey").Value;
 
 builder.Services.AddControllers().AddJsonOptions(x =>

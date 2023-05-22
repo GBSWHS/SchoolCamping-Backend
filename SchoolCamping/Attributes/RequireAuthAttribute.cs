@@ -12,7 +12,8 @@ namespace SchoolCamping.Attributes
             {
                 var m = new GeneralResponseModel();
                 m.Success = false;
-                m.Message = "https://www.youtube.com/watch?v=MWql1CBYlk8";
+                m.Message = "Failed to validate session. please login again";
+                // m.Message = "https://www.youtube.com/watch?v=MWql1CBYlk8";
                 context.Result = new JsonResult(m);
                 context.HttpContext.Response.StatusCode = 401;
                 return;
