@@ -39,8 +39,7 @@ namespace SchoolCamping.Controllers
         public async Task<IActionResult> GetReservesAsync()
         {
             var db = new LocalDbContext();
-            var reserves = db.Reserves.OrderBy(x => x.ReservedAt)
-                .Take(50);
+            var reserves = db.Reserves.Where(x => x.ReservedAt.Year == DateTime.Today.Year).OrderBy(x => x.ReservedAt);
 
             var data = from m in reserves
                 select new { m.Id, m.Mates, m.ReservedAt, m.Teacher };

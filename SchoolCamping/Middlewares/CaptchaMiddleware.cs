@@ -22,10 +22,7 @@ namespace SchoolCamping.Middlewares
             //         ctx.Items.Add("captcha", true);
             // }
             // else 
-#if DEBUG
-            await next();
-            return;
-#endif
+
             if (ctx.Request.Method == "POST" && ctx.Request.ContentType == "application/json")
             {
                 var obj = await GetRequestBodyAsync(ctx.Request);
