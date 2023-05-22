@@ -43,7 +43,7 @@ namespace SchoolCamping.Controllers
                 .Take(50);
 
             var data = from m in reserves
-                select new { m.Id, Mates = m.Mates.Mask(), m.ReservedAt, m.Teacher };
+                select new { m.Id, m.Mates, m.ReservedAt, m.Teacher };
             var response = new GeneralResponseModel
             {
                 Data = data
