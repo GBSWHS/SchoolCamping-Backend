@@ -8,7 +8,7 @@ namespace SchoolCamping.Attributes
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (!context.HttpContext.Items.ContainsKey("admin"))
+            if (!context.HttpContext.Session.Keys.Contains("admin"))
             {
                 var m = new GeneralResponseModel();
                 m.Success = false;

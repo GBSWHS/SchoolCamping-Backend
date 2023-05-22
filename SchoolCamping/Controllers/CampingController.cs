@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using SchoolCamping.Attributes;
 using SchoolCamping.Database;
 using SchoolCamping.Models.Requests;
@@ -21,7 +22,7 @@ namespace SchoolCamping.Controllers
                 .Take(30);
 
             var data = from m in reserves
-                select new {m.Id, Mates = m.Mates.Mask(), m.ReservedAt, m.Teacher};
+                select new {m.Id, Mates = m.Mates.Mask(), m.ReservedAt, Teacher = m.Teacher.Mask()};
             var response = new GeneralResponseModel
             {
                 Data = data
@@ -70,17 +71,21 @@ namespace SchoolCamping.Controllers
                     var dateForward = DateOnly.FromDateTime(DateTime.Today).DayNumber + new DateOnly().AddDays(14).DayNumber;
 
                     var twoWeek = db.Reserves.OrderBy(x => x.ReservedAt).Where(x => x.ReservedAt.DayNumber > date && x.ReservedAt.DayNumber < dateForward).Select(x => x.Mates);
-                    IEnumerable<string> dup = new List<string>();
+                    List<string> dup = new List<string>();
                     foreach (var reserves in twoWeek)
                     {
                         var Mates = reserves.Split();
-                        dup = from m in model.Mates.Split()
+                        
+                        var var = from m in model.Mates.Split()
                             where Mates.Contains(m)
                             select m;
+
+                        dup.AddRange(var);
                     }
 
-                    dup = dup.Distinct();
                     
+                    dup = dup.Distinct().ToList();
+
                     
                     if (dup.Any())
                     {

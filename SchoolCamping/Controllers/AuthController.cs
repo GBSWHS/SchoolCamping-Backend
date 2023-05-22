@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ namespace SchoolCamping.Controllers
             var response = new GeneralResponseModel();
             if (key.Password == Vault.AuthKey)
             {
-                HttpContext.Items.Add("admin", true);
+                HttpContext.Session.Set("admin", "1"u8.ToArray());
             }
             else
             {
@@ -73,6 +74,7 @@ namespace SchoolCamping.Controllers
 
             return new JsonResult(response);
         }
+
         [HttpPut]
         [RequireAuth]
         [Route("reserve")]
