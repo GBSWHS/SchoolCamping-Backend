@@ -8,6 +8,8 @@ namespace SchoolCamping.Attributes
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
+            base.OnActionExecuting(context);
+            return;
             if (!context.HttpContext.Items.ContainsKey("captcha"))
             {
                 var m = new GeneralResponseModel();

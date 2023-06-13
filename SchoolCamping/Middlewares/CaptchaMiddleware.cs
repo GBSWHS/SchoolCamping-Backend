@@ -11,7 +11,7 @@ namespace SchoolCamping.Middlewares
         public CaptchaMiddleware(ConfigurationManager m)
         {
             configuration = m;
-            validator.UpdateSecretKey(Vault.RecaptchaKey);
+            // validator.UpdateSecretKey(Vault.RecaptchaKey);
         }
 
         public static async Task InvokeAsync(HttpContext ctx, Func<Task> next)
@@ -22,7 +22,8 @@ namespace SchoolCamping.Middlewares
             //         ctx.Items.Add("captcha", true);
             // }
             // else 
-
+            await next();
+            return;
             if (ctx.Request.Method == "POST" && ctx.Request.ContentType == "application/json")
             {
                 var obj = await GetRequestBodyAsync(ctx.Request);

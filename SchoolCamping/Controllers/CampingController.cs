@@ -103,9 +103,9 @@ namespace SchoolCamping.Controllers
                     response.Data = reserveModel;
                     response.Message = "successfully reserved.";
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-
+                    Console.WriteLine(e);
                 }
             }
 
