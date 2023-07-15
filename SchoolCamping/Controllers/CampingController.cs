@@ -41,7 +41,8 @@ namespace SchoolCamping.Controllers
             if (u == null)
             {
                 response.Success = false;
-                response.Message = "Unknown Reserve.";
+                // response.Message = "Unknown Reserve.";
+                response.Message = "존재하지 않는 예약입니다.";
                 return new JsonResult(response);
             }
 
@@ -61,7 +62,8 @@ namespace SchoolCamping.Controllers
             if (exists)
             {
                 response.Success = false;
-                response.Message = "already reserved.";
+                // response.Message = "already reserved.";
+                response.Message = "이미 해당 날짜에 예약이 있습니다.";
             }
             else
             {
@@ -90,7 +92,8 @@ namespace SchoolCamping.Controllers
                     if (dup.Any())
                     {
                         response.Success = false;
-                        response.Message = "two-week period.";
+                        // response.Message = "two-week period.";
+                        response.Message = "참가자 중 한명이 2주 이내에 스쿨캠핑 예약이 있습니다.";
                         response.Data = dup;
                         return new JsonResult(response);
                     }
@@ -101,7 +104,8 @@ namespace SchoolCamping.Controllers
                     await db.Reserves.AddAsync(reserveModel);
                     await db.SaveChangesAsync();
                     response.Data = reserveModel;
-                    response.Message = "successfully reserved.";
+                    // response.Message = "successfully reserved.";
+                    response.Message = "성공적으로 예약되었습니다.";
                 }
                 catch (Exception e)
                 {
@@ -131,7 +135,8 @@ namespace SchoolCamping.Controllers
             db.Reserves.Remove(u);
             await db.SaveChangesAsync();
 
-            response.Message = "Successfully deleted reserve.";
+            // response.Message = "Successfully deleted reserve.";
+            response.Message = "예약을 삭제했습니다.";
 
             return new JsonResult(response);
         }
@@ -147,7 +152,8 @@ namespace SchoolCamping.Controllers
             if (u == null)
             {
                 response.Success = false;
-                response.Message = "Unknown Reserve.";
+                // response.Message = "Unknown Reserve.";
+                response.Message = "존재하지 않는 예약입니다.";
                 return new JsonResult(response);
             }
 
@@ -156,7 +162,8 @@ namespace SchoolCamping.Controllers
                 db.Reserves.Update(new Reserves() { Id = id, Mates = m.Mates, Passcode = u.Passcode, ReservedAt = m.Date, Teacher = m.Teacher });
                 await db.SaveChangesAsync();
 
-                response.Message = "Successfully modified reserve.";
+                // response.Message = "Successfully modified reserve.";
+                response.Message = "예약을 수정했습니다.";
                 return new JsonResult(response);
             }
 
@@ -165,15 +172,16 @@ namespace SchoolCamping.Controllers
             if (exists)
             {
                 response.Success = false;
-                response.Message = "already reserved.";
+                // response.Message = "already reserved.";
+                response.Message = "이미 해당 날짜에 예약이 있습니다.";
                 return new JsonResult(response);
             }
 
             db.Reserves.Update(new Reserves(){Id = id, Mates = m.Mates, Passcode = u.Passcode, ReservedAt = m.Date, Teacher = m.Teacher});
             await db.SaveChangesAsync();
 
-            response.Message = "Successfully modified reserve.";
-
+            // response.Message = "Successfully modified reserve.";
+            response.Message = "예약을 수정했습니다.";
             return new JsonResult(response);
         }
     }
